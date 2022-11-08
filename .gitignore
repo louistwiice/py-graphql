@@ -1,4 +1,4 @@
-# Byte-compiled / optimized / DLL files
+# ==== Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
@@ -8,7 +8,14 @@ __pypackages__/
 .vscode/
 .idea/
 
+# ==== Applications files
 data/
 */media/
 */static/
 */staticfiles/
+
+logs/
+*.logs
+
+# ==== env files
+.envrc

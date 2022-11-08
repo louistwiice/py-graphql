@@ -21,8 +21,14 @@ Please follow this part to start the project
 | POSTGRES_PORT     | Postgres port          | 5432       |
 
 ### .env file for the app in .envs/.env.app
-| Variable   | Description       | Default | Example             |
-|------------|-------------------|---------|---------------------|
-| DEBUG      | To activate Debug | 1       ||
-| SECRET_KEY | Django secret key |         | my-secret-key-value |
+| Variable            | Description                                                                    | Default             | Example             |
+|---------------------|--------------------------------------------------------------------------------|---------------------|---------------------|
+| DEBUG               | To activate Debug                                                              | True                |                     |
+| SECRET_KEY          | Django secret key                                                              |                     | my-secret-key-value |
+| EMAIL_PORT          | Email Port                                                                     | 1025                | 584                 |
+| EMAIL_HOST          | Email host                                                                     | mailhog             | smtp.gmail.com      |
+| EMAIL_USE_TLS       | Use TLS when sending email                                                     | False               |                     |
+| EMAIL_HOST_USER     | Email user                                                                     | example@example.com |                     |
+| EMAIL_HOST_PASSWORD | Email password                                                                 | None                |                     |
+| LOG_FORMATTER       | Way to print your log. Colored (colored_formatter) or in JSON (json_formatter) | colored_formatter   |                     |
 
