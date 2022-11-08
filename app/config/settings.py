@@ -85,6 +85,17 @@ DATABASES = {
     }
 }
 
+# Redis
+REDIS_DEFAULT_CACHE_DB = os.getenv("REDIS_DEFAULT_CACHE_DB", default=5)
+
+REDIS_URL = os.getenv("REDIS_URL", default="redis://redis:6379/{}".format(REDIS_DEFAULT_CACHE_DB))
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": REDIS_URL,
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
