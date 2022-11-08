@@ -7,3 +7,5 @@ EMAIL_USE_TLS = bool(os.getenv('EMAIL_USE_TLS', default=False))
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', default='example@example.com')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', default=None)
 
+REDIS_URL = os.getenv("REDIS_URL", default="redis://redis:6379/")
+
