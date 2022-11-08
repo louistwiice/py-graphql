@@ -29,15 +29,27 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
+THIRD_APPS = [
+    'graphene_django',
+    'graphql_auth',
+    'django_filters'
+    #'graphql_jwt.refresh_token.apps.RefreshTokenConfig',
+]
+
+CREATED_APPS = [
+    'cuser'
+]
+
+BASE_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cuser'
 ]
+
+INSTALLED_APPS = BASE_APPS + CREATED_APPS + THIRD_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -74,16 +86,24 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB', default='graphql'),
-        'USER': os.getenv('POSTGRES_USER', default='test'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='test'),
-        'HOST': os.getenv('POSTGRES_HOST', default='postgres'),
-        'PORT': os.getenv('POSTGRES_PORT', default=5432),
+if os.getenv('USE_SQLITE', default=False) is False:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('POSTGRES_DB', default='graphql'),
+            'USER': os.getenv('POSTGRES_USER', default='test'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='test'),
+            'HOST': os.getenv('POSTGRES_HOST', default='postgres'),
+            'PORT': os.getenv('POSTGRES_PORT', default=5432),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3'
+        }
+    }
 
 # Redis
 REDIS_DEFAULT_CACHE_DB = os.getenv("REDIS_DEFAULT_CACHE_DB", default=5)
@@ -92,7 +112,7 @@ REDIS_URL = os.getenv("REDIS_URL", default="redis://redis:6379/{}".format(REDIS_
 
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": REDIS_URL,
     }
 }
@@ -145,6 +165,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "cuser.User"
 
+AUTHENTICATION_BACKENDS = [
+    #'graphql_jwt.backends.JSONWebTokenBackend',
+    "graphql_auth.backends.GraphQLAuthBackend",
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 # === Logging settings
 LOGGING = {
     'version': 1,
@@ -192,3 +218,28 @@ structlog.configure(
     logger_factory=structlog.stdlib.LoggerFactory(),
     cache_logger_on_first_use=True,
 )
+
+# ==== GraphQL setting
+GRAPHQL_JWT = {
+    "JWT_VERIFY_EXPIRATION": True,
+
+    # optional
+    "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
+}
+
+GRAPHENE = {
+    'SCHEMA': 'cuser.schema.schema',
+    'MIDDLEWARE': [
+        'graphql_jwt.middleware.JSONWebTokenMiddleware',
+    ],
+    "JWT_ALLOW_ANY_CLASSES": [
+        "graphql_auth.mutations.Register",
+    ],
+}
+
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', default=1025))
+EMAIL_HOST = os.getenv('EMAIL_HOST', default='mailhog')
+EMAIL_USE_TLS = bool(os.getenv('EMAIL_USE_TLS', default=False))
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', default='example@example.com')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', default=None)
