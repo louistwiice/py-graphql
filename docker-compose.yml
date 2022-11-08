@@ -27,4 +27,4 @@ services:
       - ./scripts/:/code/scripts
     env_file:
       - ./.envs/.env.app
-
+      - ./.envs/.env.postgres

@@ -21,13 +21,8 @@ Please follow this part to start the project
 | POSTGRES_PORT     | Postgres port          | 5432       |
 
 ### .env file for the app in .envs/.env.app
-| Variable          | Description            | Default            | Example |
-|-------------------|------------------------|--------------------|---------|
-| POSTGRES_USER     | Postgres USERNAME      | test               ||
-| POSTGRES_PASSWORD | Postgres password      | passer1234         ||
-| POSTGRES_DB       | Postgres Database name | graphql            ||
-| POSTGRES_HOST     | Postgres host          | potsgres           ||
-| POSTGRES_PORT     | Postgres port          | 5432               ||
-| DEBUG             | To activate Debug      | 1                  ||
-| SECRET_KEY        | Django secret key      | django-insecure-72 ||
+| Variable   | Description       | Default | Example             |
+|------------|-------------------|---------|---------------------|
+| DEBUG      | To activate Debug | 1       ||
+| SECRET_KEY | Django secret key |         | my-secret-key-value |
 
